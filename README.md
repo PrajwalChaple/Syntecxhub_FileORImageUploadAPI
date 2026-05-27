@@ -133,6 +133,4 @@ Syntecxhub_FileORImageUploadAPI/
 
 ---
 
-## 📜 License
 
-ISC © SyntecxHub
