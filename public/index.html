@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SyntecxHub File & Image Upload API - Upload, manage, and serve images with a beautiful UI" />
+  <title>SyntecxHub — File & Image Upload</title>
+
+  <!-- Google Fonts - Inter for clean modern typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ====================================== -->
+  <!-- Animated Background Gradient Blobs     -->
+  <!-- ====================================== -->
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- ====================================== -->
+  <!-- Main App Container                     -->
+  <!-- ====================================== -->
+  <div class="app-container">
+
+    <!-- Header Section -->
+    <header class="app-header" id="app-header">
+      <div class="logo">
+        <div class="logo-icon">
+          <i data-lucide="cloud-upload" class="icon"></i>
+        </div>
+        <div>
+          <h1>SyntecxHub</h1>
+          <p class="tagline">File & Image Upload API</p>
+        </div>
+      </div>
+      <!-- Health status indicator -->
+      <div class="status-badge" id="status-badge">
+        <span class="status-dot"></span>
+        <span class="status-text">Checking...</span>
+      </div>
+    </header>
+
+    <!-- ====================================== -->
+    <!-- Upload Section                         -->
+    <!-- ====================================== -->
+    <section class="upload-section" id="upload-section">
+      <div class="section-header">
+        <h2><i data-lucide="upload" class="section-icon"></i> Upload Image</h2>
+        <p class="section-desc">Drag & drop or click to select an image. Max 5MB. Supports JPEG, PNG, GIF, WebP, SVG.</p>
+      </div>
+
+      <!-- Drag & Drop Zone -->
+      <div class="drop-zone" id="drop-zone">
+        <div class="drop-zone-content">
+          <div class="drop-icon">
+            <i data-lucide="image-plus" class="icon-large"></i>
+          </div>
+          <p class="drop-text">Drag & drop your image here</p>
+          <p class="drop-subtext">or</p>
+          <label class="file-select-btn" for="file-input" id="file-select-btn">
+            <i data-lucide="folder-open"></i>
+            Browse Files
+          </label>
+          <input type="file" id="file-input" accept="image/*" hidden />
+        </div>
+
+        <!-- Preview area (shown after file selection) -->
+        <div class="preview-area" id="preview-area" style="display:none;">
+          <img id="preview-image" src="" alt="Preview" />
+          <div class="preview-info">
+            <p class="preview-name" id="preview-name"></p>
+            <p class="preview-size" id="preview-size"></p>
+          </div>
+          <button class="btn-clear" id="btn-clear" title="Remove">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Upload Button -->
+      <button class="btn-upload" id="btn-upload" disabled>
+        <i data-lucide="upload-cloud"></i>
+        <span>Upload Image</span>
+      </button>
+
+      <!-- Progress Bar -->
+      <div class="progress-container" id="progress-container" style="display:none;">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <p class="progress-text" id="progress-text">Uploading...</p>
+      </div>
+
+      <!-- Upload Result Message -->
+      <div class="result-message" id="result-message" style="display:none;"></div>
+    </section>
+
+    <!-- ====================================== -->
+    <!-- Gallery Section                        -->
+    <!-- ====================================== -->
+    <section class="gallery-section" id="gallery-section">
+      <div class="section-header">
+        <h2><i data-lucide="images" class="section-icon"></i> Uploaded Images</h2>
+        <div class="gallery-controls">
+          <span class="file-count" id="file-count">0 files</span>
+          <button class="btn-refresh" id="btn-refresh" title="Refresh gallery">
+            <i data-lucide="refresh-cw"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div class="gallery-loading" id="gallery-loading">
+        <div class="spinner"></div>
+        <p>Loading images...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div class="gallery-empty" id="gallery-empty" style="display:none;">
+        <i data-lucide="image-off" class="icon-empty"></i>
+        <p>No images uploaded yet</p>
+        <p class="empty-sub">Upload your first image above!</p>
+      </div>
+
+      <!-- Image Grid -->
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </section>
+
+    <!-- ====================================== -->
+    <!-- API Info Section                       -->
+    <!-- ====================================== -->
+    <section class="api-section" id="api-section">
+      <div class="section-header">
+        <h2><i data-lucide="code-2" class="section-icon"></i> API Endpoints</h2>
+      </div>
+      <div class="api-cards">
+        <div class="api-card">
+          <span class="method post">POST</span>
+          <code>/api/files/upload</code>
+          <p>Upload a single image (multipart/form-data, field: "file")</p>
+        </div>
+        <div class="api-card">
+          <span class="method get">GET</span>
+          <code>/api/files</code>
+          <p>List all uploaded files metadata</p>
+        </div>
+        <div class="api-card">
+          <span class="method get">GET</span>
+          <code>/api/files/:id</code>
+          <p>Get single file metadata by MongoDB ID</p>
+        </div>
+        <div class="api-card">
+          <span class="method delete">DELETE</span>
+          <code>/api/files/:id</code>
+          <p>Delete file from disk & database</p>
+        </div>
+        <div class="api-card">
+          <span class="method get">GET</span>
+          <code>/uploads/:filename</code>
+          <p>Serve the actual image file (static)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>Built with ❤️ by <strong>SyntecxHub</strong> &mdash; File/Image Upload API Project</p>
+    </footer>
+  </div>
+
+  <!-- ====================================== -->
+  <!-- Image Lightbox Modal                   -->
+  <!-- ====================================== -->
+  <div class="lightbox" id="lightbox" style="display:none;">
+    <div class="lightbox-overlay" id="lightbox-overlay"></div>
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightbox-close">
+        <i data-lucide="x"></i>
+      </button>
+      <img id="lightbox-image" src="" alt="Full size" />
+      <div class="lightbox-info" id="lightbox-info"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
